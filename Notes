@@ -8,3 +8,15 @@
 # Interesting stuff
 https://towardsdatascience.com/neural-network-for-satellite-data-classification-using-tensorflow-in-python-a13bcf38f3e1
 https://howtoinqgis.wordpress.com/2016/12/17/how-to-split-a-raster-in-several-tiles-using-qgis-or-python-gdal/
+https://github.com/kk7nc/Text_Classification#recurrent-neural-networks-rnn
+
+Pixelsize: 27.8 x 27.8 m, average diameter of a tell: ~100m
+
+# Approaches
+    - Identification via hillshade
+    - Coloring the corresponding ground
+
+# Problems / goals
+    - More than one tell per picture
+    - Get the center coordinate of a potential finding
+    - Some tells are laying on 'dark' areas, other approaches?
