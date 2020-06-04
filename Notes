@@ -1,6 +1,9 @@
 # To-do
     - Filter produced images according to nodata / delete detected files by code
-    - Filter produced images by including points
+    - Filter produced images by including points / done!
+    - Filter useless images (black rows)
+
+# GDAL is necessary!
 
 # To find out
     - Can one filter an image
