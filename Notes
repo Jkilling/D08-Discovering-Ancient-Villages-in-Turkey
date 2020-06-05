@@ -8,6 +8,14 @@
 # To find out
     - Can one filter an image
 
+Installation:
+    - Virtual environment needed:
+        conda create -n py37_64
+        conda activate py37_64
+        conda config --env --set subdir win-64
+        conda install python=3.7
+    - Corresponding to the tensorflow version one wants or needs
+
 # Interesting stuff
 https://towardsdatascience.com/neural-network-for-satellite-data-classification-using-tensorflow-in-python-a13bcf38f3e1
 https://howtoinqgis.wordpress.com/2016/12/17/how-to-split-a-raster-in-several-tiles-using-qgis-or-python-gdal/

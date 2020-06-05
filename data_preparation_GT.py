@@ -73,3 +73,4 @@ for filename in os.listdir(directory):
 for f in findings:
     shutil.copy(f, 'data\\derived_data\\confirmed_sites')
 
+
