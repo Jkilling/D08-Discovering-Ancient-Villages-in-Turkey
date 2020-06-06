@@ -29,8 +29,8 @@ output_filename = 'tile_'
 # Define tiling size
 gt_dem = rasterio.open(data_folder + input_filename, crs={'init': 'epsg:32637'})
 
-tile_size_x = np.round(gt_dem.shape[0] / 55, 0).astype(int)  # in pixels not metrics!
-tile_size_y = np.round(gt_dem.shape[1] / 55, 0).astype(int)
+tile_size_x = np.round(gt_dem.shape[0] / 99, 0).astype(int)  # in pixels not metrics!
+tile_size_y = np.round(gt_dem.shape[1] / 119, 0).astype(int)
 
 ds = gdal.Open(data_folder + input_filename)
 band = ds.GetRasterBand(1)
