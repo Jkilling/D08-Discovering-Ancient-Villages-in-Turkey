@@ -44,6 +44,9 @@ for i in confirmed_sites:
     except ValueError:
         pass
 
+for f in findings_negative:
+    shutil.copy(f, 'data\\derived_data\\negative_examples')
+
 # Randomely chosen images
 all_tiles = os.listdir('data\\derived_data\\tiles')
 all_tiles = ['data\\derived_data\\tiles\\' + x for x in all_tiles]
