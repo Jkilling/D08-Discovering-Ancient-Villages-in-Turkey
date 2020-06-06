@@ -52,7 +52,7 @@ for filename in os.listdir(directory):
     with rasterio.open(directory + '\\' + filename, crs={'EPSG:32637'}) as src:
         raster_array = src.read(1).ravel()
 
-    if raster_array.any() == 0:
+    if (raster_array == 0).any():
         print('Found NA:', filename)
         nodatas.append('data\\derived_data\\tiles\\'+filename)
 
