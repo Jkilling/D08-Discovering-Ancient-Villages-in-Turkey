@@ -91,3 +91,57 @@ for filename in os.listdir(directory):
 for f in findings:
     shutil.copy(f, 'data\\derived_data\\confirmed_sites')
 
+# Buffer each point using a 900 meter circle radius
+# Buffer each point using a 900 meter circle radius
+datadir = os.getcwd()
+tell_sites = gpd.read_file("data/raw_data/tell_sites.geojson").to_crs({'init': 'epsg:32637'})
+poly = tell_sites.copy()
+directory = r'data/derived_data/tiles'
+try:
+    os.mkdir('data/derived_data/negative_examples')
+
+except OSError:
+    pass
+
+poly['geometry'] = poly.geometry.buffer(900)
+poly_g = gpd.GeoSeries(poly['geometry'], crs='EPSG:32637')
+
+findings_negative = []
+confirmed_sites = os.listdir('data/derived_data/confirmed_sites')
+eliminated_sites = ['tile_500_1425.tif', 'tile_2200_50.tif', 'tile_2275_375.tif',
+                    'tile_2000_1850.tif', 'tile_1850_1950.tif']
+
+for i in eliminated_sites:
+    try:
+        confirmed_sites.remove(i)
+    except ValueError:
+        pass
+
+confirmed_sites = ['data/derived_data/tiles/' + x for x in confirmed_sites]
+
+for filename in os.listdir(directory):
+    raster = rasterio.open(directory + '/' + filename, crs={'init': 'epsg:32637'})
+    points = [Point(np.asarray(raster.bounds)[0], np.asarray(raster.bounds)[1]),
+              Point(np.asarray(raster.bounds)[2], np.asarray(raster.bounds)[1]),
+              Point(np.asarray(raster.bounds)[2], np.asarray(raster.bounds)[3]),
+              Point(np.asarray(raster.bounds)[0], np.asarray(raster.bounds)[3])]
+
+    bb = gpd.GeoSeries(Polygon(sum(map(list, (p.coords for p in points)), [])), crs='EPSG:32637')
+    bools = poly_g.overlaps(bb.loc[0])
+
+    if True in bools.values:
+        # print('Found overlapping polygon:', filename)
+        findings_negative.append('data/derived_data/tiles/' + filename)
+
+    else:
+        continue
+
+    for i in confirmed_sites:
+        try:
+            findings_negative.remove(i)
+        except ValueError:
+            pass
+
+for f in findings_negative:
+    shutil.copy(f, 'data/derived_data/negative_examples')
+print(len(os.listdir('data/derived_data/negative_examples')))
