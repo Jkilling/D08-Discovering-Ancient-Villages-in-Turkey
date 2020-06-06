@@ -54,7 +54,8 @@ except OSError:
 
 """## DATA PREPARATION
 
-Start to read the data and prepare the division into confirmed site (images where we know there is a tell), negative site (images where we know that there is not) and random sites (where we cannot say beforehand what is there.
+Start to read the data and prepare the division into confirmed site (images where we know there is a tell), 
+negative site (images where we know that there is not) and random sites (where we cannot say beforehand what is there.
 """
 
 # Data
@@ -63,7 +64,8 @@ tell_sites = gpd.read_file("data/raw_data/tell_sites.geojson").to_crs({'init': '
 poly = tell_sites.copy()
 directory = r'data/derived_data/tiles'
 
-"""This is the code that we use to move the images of the confirmed sites to another folder. We already know which images are confirmed, it's already in the dataset as information (contained in the geojson file)"""
+"""This is the code that we use to move the images of the confirmed sites to another folder. 
+We already know which images are confirmed, it's already in the dataset as information (contained in the geojson file)"""
 
 # import os
 # import gdal
@@ -140,7 +142,10 @@ directory = r'data/derived_data/tiles'
 # for f in findings:
 #     shutil.copy(f, 'data\\derived_data\\confirmed_sites')
 
-"""We already detected the positive sites, with the code above that now is commented, so now we want to look at the negative sites. We take a 900 meters buffer and we assume that within 900m of a tell there should be no other tell. Then we classify the images within this range as negative sites"""
+"""We already detected the positive sites, with the code above that now is commented, 
+so now we want to look at the negative sites. We take a 900 meters buffer and we assume 
+that within 900m of a tell there should be no other tell. Then we classify the images 
+within this range as negative sites"""
 
 # Buffer each point using a 900 meter circle radius
 poly["geometry"] = poly.geometry.buffer(900)
@@ -183,7 +188,8 @@ for filename in os.listdir(directory):
         except ValueError:
             pass
 
-"""We still have too few images, so we need to add some of the images from the random sites. We would like to reach a high amount of data to train accurately the network. 
+"""We still have too few images, so we need to add some of the images from the random sites. 
+We would like to reach a high amount of data to train accurately the network. 
 So we add some images at random.
 """
 
@@ -206,9 +212,10 @@ random_sites = random.sample(all_tiles, number_of_images_we_want_to_have_for_tra
 !rm -rf 'data/train'
 !rm -rf 'data/validation'
 
-"""Here we actually move the image to another folder"""
+"""Here we actually move the images to another folder"""
 
 # Copy found areas to external folder
+""" We decided not to use the random sites but the possibility is given."""
 #print("so now we copy {} negative images + {} random = {} in total into our negative example folder, that will be used as negative examples".format(len(findings_negative), len(random_sites), len(findings_negative)+len(random_sites)))
 #for f in findings_negative+random_sites:
 for f in findings_negative:
@@ -250,6 +257,7 @@ We create the folder structure
 #    |-- tell
 #    |
 #    |-- notell
+
 train_dir = 'data' + '/train'
 validation_dir = 'data' + '/validation'
 class1 = 'tell'
