@@ -40,13 +40,28 @@ ysize = band.YSize
 # For loop for tiling using GDAL
 for i in range(0, xsize, tile_size_x):
     for j in range(0, ysize, tile_size_y):
-        com_string = "gdal_translate -of GTIFF -a_nodata 0 -srcwin " + str(i) + ", " + str(j) + ", " + str(
+        com_string = "gdal_translate -of GTIFF -a_nodata 'nan' -srcwin " + str(i) + ", " + str(j) + ", " + str(
             tile_size_x) + ", " + str(tile_size_y) + " " + str(data_folder) + str(input_filename) + " " + str(
             out_path) + str(output_filename) + str(i) + "_" + str(j) + ".tif"
         os.system(com_string)
 
-# Loop through directory
+# Filter no data
 directory = r'data\\derived_data\\tiles'
+nodatas = []
+for filename in os.listdir(directory):
+    with rasterio.open(directory + '\\' + filename, crs={'EPSG:32637'}) as src:
+        raster_array = src.read(1).ravel()
+
+    if raster_array.any() == 0:
+        print('Found NA:', filename)
+        nodatas.append('data\\derived_data\\tiles\\'+filename)
+
+    else:
+        continue
+
+os.remove(['data\\derived_data\\tiles\\' + x for x in nodatas])
+
+# Loop through directory
 findings = []
 sites = gpd.GeoSeries(tell_sites['geometry'], crs='EPSG:32637')
 
@@ -67,21 +82,6 @@ for filename in os.listdir(directory):
     else:
         continue
 
-# Filter no data
-
-for filename in os.listdir(directory):
-    with rasterio.open(directory + '\\' + filename, crs={'EPSG:32637'}) as src:
-        raster_array = src.read(1).ravel()
-
-    if raster_array.any() == 0:
-        print('Found NA:', filename)
-        # findings.append('data\\derived_data\\tiles\\'+filename)
-
-    else:
-        continue
-
-with rasterio.open('data\\derived_data\\tiles\\tile_2970_2214.tif', crs={'EPSG:32637'}) as src:
-    raster_array = src.read(1).ravel()
 
 # Copy found areas to external folder
 for f in findings:
